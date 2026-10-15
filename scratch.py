@@ -3,17 +3,6 @@ import matplotlib.pyplot as plt
 import type_enforced
 from uuid import uuid1
 
-ALL_OPERATOR_SYMBOLS = [
-    '===',           # Assignment
-    '==>',           # Creates
-    '[:.',           # Consumed for nothing   
-    '[+]',           # Cure
-    '<x>',           # Dangerous
-    '/=/',           # Decay
-    '}=>',           # forcibly grabs
-    '?_?',           # Unsure
-]
-
 ALL_EQUATION_TYPES ={
     "Assignment": '===',
     "Create"    : '==>',
