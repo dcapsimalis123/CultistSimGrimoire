@@ -18,16 +18,18 @@ class Equation():
     #components
         # items
             # uuid
-            # word list [both words and operations are words in this case]
+            # input word list
+            # equation type
+            # output word list
         # funcs
-        # init
-        # __str__
-        # 
+            # __init__
+            # __str__
+            # 
     def __init__(self,inputed_strings : list[tuple[int,str]]):
-        self.input_words = [] # string names
+        self.input_words   = [] # string names
         self.equation_type = ''
         self.output_words  = [] # string names
-        self.uuid = uuid1
+        self.uuid = ''
         for word in inputed_strings:
             if word.name in ALL_EQUATION_TYPES.keys():
                 self.equation_type = word.name
@@ -35,8 +37,10 @@ class Equation():
                 self.input_words.append(word.name)
             else:
                 self.output_words.append(word.name)
-            pass
 
+        self.uuid += ''.join(self.input_words)
+        self.uuid += self.equation_type
+        self.uuid += ''.join(self.output_words)
 
 class Word():
     # components
@@ -112,10 +116,6 @@ class Grimoire():
         self.equation_list = {}           # relates the tiles uuid to obj
         self.equation_list_reveresed = {} # relates the tile obj to their uuid
 
-        self.operator_list = {y : uuid1() for y in ALL_OPERATOR_SYMBOLS}
-        self.operator_list_reversed = {v: k for k, v in self.operator_list.items()}
-        pass
-
     def load_from_binary(self, save_file : str) -> None:
         pass
 
@@ -123,13 +123,13 @@ class Grimoire():
         pass
 
     def strip_equation(self,inputed_string) -> Equation:
-        splitted = inputed_string.split(' ')
+        split = inputed_string.split(' ')
         equation_temp = []
         new_word_list = []
-        for i, word in enumerate(splitted):
-            if splitted in ALL_OPERATOR_SYMBOLS:
-                next_word = self.operator_list[word]
-            elif self.new_word_check(splitted):
+        for i, word in enumerate(split):
+            if split in ALL_EQUATION_TYPES.values():
+                next_word = ALL_EQUATION_TYPES[word]
+            elif self.new_word_check(split):
                 next_word = Word(word)
                 new_word_list.append(next_word)
             equation_temp.append(next_word)
@@ -141,3 +141,11 @@ class Grimoire():
     def new_equation_check(self, new_word) -> bool:
         pass
 
+    def unique_equation_check(self, new_equation : Equation) -> bool:
+        try:
+            self.equation_list[new_equation.uuid]
+            return False
+        except:
+            print("New Equation Found")
+            self.equation_list[new_equation.uuid] = new_equation
+            return True
